@@ -25,11 +25,14 @@
       <div class="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-600/20">
         <i data-lucide="tv" class="w-5 h-5"></i>
       </div>
-      <h1 class="text-2xl font-black tracking-tight text-white">Manager</h1>
+      <h1 class="text-2xl font-black tracking-tight text-white">IPTV Manager</h1>
     </div>
     <div class="flex items-center gap-3">
-      <button onclick="openSettings()" class="w-10 h-10 flex items-center justify-center rounded-full bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white transition-all active:scale-95">
+      <button onclick="openSettings()" class="w-10 h-10 flex items-center justify-center rounded-full bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white transition-all active:scale-95" title="Settings">
         <i data-lucide="settings" class="w-5 h-5"></i>
+      </button>
+      <button onclick="openAdd()" class="flex items-center gap-2 bg-indigo-600/20 hover:bg-indigo-600 text-indigo-400 hover:text-white px-5 py-2.5 rounded-full text-sm font-bold transition-all active:scale-95">
+        <i data-lucide="plus" class="w-4 h-4"></i> <span class="hidden sm:inline">Add Stream</span>
       </button>
       <button onclick="loadPlaylist()" id="btn-fetch" class="flex items-center gap-2 bg-zinc-900 hover:bg-zinc-800 px-5 py-2.5 rounded-full text-sm font-semibold transition-all active:scale-95 disabled:opacity-50">
         <i data-lucide="download" class="w-4 h-4"></i> <span>Fetch</span>
@@ -65,7 +68,7 @@
         <div class="flex items-center gap-3">
           <span id="selected-count" class="text-sm font-bold text-zinc-400">0 Selected</span>
           <button onclick="deleteSelected()" class="flex items-center gap-2 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white px-5 py-3 rounded-2xl text-sm font-bold transition-all active:scale-95">
-            <i data-lucide="trash-2" class="w-4 h-4"></i> <span class="hidden sm:inline">Delete</span>
+            <i data-lucide="trash-2" class="w-4 h-4"></i> <span class="hidden sm:inline">Delete Selected</span>
           </button>
         </div>
       </div>
@@ -127,7 +130,7 @@
         </div>
         <div>
           <label class="block text-sm font-bold mb-2 text-zinc-300 pl-1">File Path in Dropbox</label>
-          <input type="text" id="input-path" class="w-full bg-zinc-950 border-none rounded-2xl p-4 text-base focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all placeholder:text-zinc-700" placeholder="/premium_list.m3u">
+          <input type="text" id="input-path" class="w-full bg-zinc-950 border-none rounded-2xl p-4 text-base focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all placeholder:text-zinc-700" placeholder="/playlist.m3u">
         </div>
         <button onclick="saveSettings()" class="w-full bg-white hover:bg-zinc-200 text-black py-4 rounded-2xl text-base font-bold transition-all active:scale-[0.98] mt-4">
           Save & Continue
@@ -136,23 +139,39 @@
     </div>
   </div>
 
-  <!-- Edit Modal -->
+  <!-- Edit / Add Modal -->
   <div id="edit-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md hidden">
-    <div class="bg-zinc-900 w-full max-w-md rounded-[2rem] p-8 shadow-2xl relative modal-enter">
-      <h3 class="text-xl font-black mb-6">Edit Stream</h3>
-      <div class="space-y-5">
-        <div>
-          <label class="block text-sm font-bold mb-2 text-zinc-300 pl-1">Stream Name</label>
+    <div class="bg-zinc-900 w-full max-w-2xl rounded-[2rem] p-8 shadow-2xl relative modal-enter max-h-[90vh] overflow-y-auto custom-scrollbar">
+      <h3 id="edit-modal-title" class="text-xl font-black mb-6">Edit Stream</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="md:col-span-2">
+          <label class="block text-sm font-bold mb-2 text-zinc-300 pl-1">Stream Name *</label>
           <input type="text" id="edit-name" class="w-full bg-zinc-950 border-none rounded-2xl p-4 text-base focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all">
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm font-bold mb-2 text-zinc-300 pl-1">Stream URL *</label>
+          <input type="text" id="edit-url" class="w-full bg-zinc-950 border-none rounded-2xl p-4 text-base focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all font-mono text-sm text-indigo-200">
         </div>
         <div>
           <label class="block text-sm font-bold mb-2 text-zinc-300 pl-1">Category / Group</label>
           <input type="text" id="edit-group" class="w-full bg-zinc-950 border-none rounded-2xl p-4 text-base focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all">
         </div>
+        <div>
+          <label class="block text-sm font-bold mb-2 text-zinc-300 pl-1">Logo URL</label>
+          <input type="text" id="edit-logo" class="w-full bg-zinc-950 border-none rounded-2xl p-4 text-base focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all placeholder:text-zinc-700" placeholder="https://...">
+        </div>
+        <div>
+          <label class="block text-sm font-bold mb-2 text-zinc-300 pl-1">EPG ID (tvg-id)</label>
+          <input type="text" id="edit-tvgid" class="w-full bg-zinc-950 border-none rounded-2xl p-4 text-base focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all">
+        </div>
+        <div>
+          <label class="block text-sm font-bold mb-2 text-zinc-300 pl-1">EPG Name (tvg-name)</label>
+          <input type="text" id="edit-tvgname" class="w-full bg-zinc-950 border-none rounded-2xl p-4 text-base focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all">
+        </div>
       </div>
       <div class="flex gap-3 mt-8">
         <button onclick="closeEdit()" class="flex-1 py-4 rounded-2xl text-sm font-bold text-zinc-300 bg-zinc-800 hover:bg-zinc-700 transition-colors">Cancel</button>
-        <button onclick="saveEdit()" class="flex-[2] py-4 rounded-2xl text-sm font-bold bg-indigo-600 hover:bg-indigo-500 text-white transition-colors">Confirm Changes</button>
+        <button onclick="saveEdit()" class="flex-[2] py-4 rounded-2xl text-sm font-bold bg-indigo-600 hover:bg-indigo-500 text-white transition-colors">Save Stream</button>
       </div>
     </div>
   </div>
@@ -162,7 +181,7 @@
     // App State
     let state = {
         token: localStorage.getItem('dropbox_token') || '',
-        filePath: localStorage.getItem('dropbox_filepath') || '/playlist.m3u',
+        filePath: localStorage.getItem('dropbox_filepath') || '/14m3ueditor/playlist.m3u',
         channels: [],
         search: '',
         selectedGroup: 'All',
@@ -178,24 +197,37 @@
     document.getElementById('input-path').value = state.filePath;
     if (!state.token) openSettings();
 
-    // M3U Processing
+    // --- M3U Processing (Professional Parsing with Regex) ---
+    function extractAttr(line, attr) {
+      const regex = new RegExp(`${attr}="([^"]*)"`, 'i');
+      const match = line.match(regex);
+      return match ? match[1] : '';
+    }
+
     function parseM3U(text) {
       const lines = text.split(/\r?\n/);
       const channels = [];
       let currentChannel = {};
 
-      if (!lines[0].startsWith('#EXTM3U')) throw new Error("Invalid M3U: Missing #EXTM3U header");
+      if (!lines[0].startsWith('#EXTM3U')) throw new Error("Invalid M3U file: Missing #EXTM3U header");
 
       for (let i = 1; i < lines.length; i++) {
         const line = lines[i].trim();
         if (!line) continue;
 
         if (line.startsWith('#EXTINF:')) {
-          currentChannel = { rawExtinf: line, id: crypto.randomUUID() };
+          currentChannel = { id: crypto.randomUUID() };
+          
+          // Name extraction (everything after the last comma)
           const commaIndex = line.lastIndexOf(',');
           currentChannel.name = commaIndex !== -1 ? line.substring(commaIndex + 1).trim() : 'Unknown';
-          const groupMatch = line.match(/group-title="([^"]*)"/);
-          currentChannel.group = groupMatch ? groupMatch[1] : 'Uncategorized';
+          
+          // Tag extractions
+          currentChannel.group = extractAttr(line, 'group-title') || 'Uncategorized';
+          currentChannel.logo = extractAttr(line, 'tvg-logo');
+          currentChannel.tvgId = extractAttr(line, 'tvg-id');
+          currentChannel.tvgName = extractAttr(line, 'tvg-name');
+          
         } else if (line.startsWith('#EXTGRP:')) {
           currentChannel.group = line.substring(8).trim();
         } else if (!line.startsWith('#')) {
@@ -212,22 +244,19 @@
     function generateM3U(channels) {
       let text = '#EXTM3U\n';
       channels.forEach(ch => {
-        let extinf = ch.rawExtinf;
-        if (extinf.includes('group-title="')) {
-          extinf = extinf.replace(/group-title="[^"]*"/, `group-title="${ch.group}"`);
-        } else {
-          extinf = extinf.replace('#EXTINF:-1 ', `#EXTINF:-1 group-title="${ch.group}" `);
-        }
-        const commaIndex = extinf.lastIndexOf(',');
-        if (commaIndex !== -1) {
-          extinf = extinf.substring(0, commaIndex + 1) + ch.name;
-        }
+        let extinf = '#EXTINF:-1';
+        if (ch.tvgId) extinf += ` tvg-id="${ch.tvgId}"`;
+        if (ch.tvgName) extinf += ` tvg-name="${ch.tvgName}"`;
+        if (ch.logo) extinf += ` tvg-logo="${ch.logo}"`;
+        if (ch.group) extinf += ` group-title="${ch.group}"`;
+        
+        extinf += `,${ch.name}`;
         text += extinf + '\n' + ch.url + '\n';
       });
       return text;
     }
 
-    // Dropbox API
+    // --- Dropbox API Communcation ---
     async function loadPlaylist() {
         if (!state.token || !state.filePath) return openSettings();
         
@@ -279,6 +308,7 @@
             showToast('Cloud sync complete.');
             state.selectedChannels.clear();
             renderGrid();
+            document.getElementById('btn-sync').disabled = true; // disable until next change
         } catch (err) {
             console.error(err);
             showToast('Sync failed.', true);
@@ -287,7 +317,7 @@
         }
     }
 
-    // UI Rendering
+    // --- UI Rendering ---
     function getFilteredChannels() {
         return state.channels.filter(c => {
             const matchGroup = state.selectedGroup === 'All' || c.group === state.selectedGroup;
@@ -303,13 +333,11 @@
         if (state.channels.length === 0) {
             grid.classList.add('hidden');
             empty.classList.remove('hidden');
-            document.getElementById('btn-sync').disabled = true;
             return;
         }
 
         empty.classList.add('hidden');
         grid.classList.remove('hidden');
-        document.getElementById('btn-sync').disabled = false;
 
         const filtered = getFilteredChannels();
         const allSelected = filtered.length > 0 && Array.from(filtered).every(c => state.selectedChannels.has(c.id));
@@ -329,22 +357,44 @@
             const isSelected = state.selectedChannels.has(channel.id);
             const escapedName = channel.name.replace(/"/g, '&quot;');
             
+            // Render actual TV Logo if it exists
+            const logoHtml = channel.logo 
+                ? `<img src="${channel.logo}" class="w-full h-full object-contain p-1" onerror="this.outerHTML='<i data-lucide=\\'tv\\' class=\\'text-zinc-700 w-6 h-6\\'></i>'"/>`
+                : `<i data-lucide="tv" class="text-zinc-700 w-6 h-6"></i>`;
+            
             html += `
                 <div onclick="toggleSelection('${channel.id}')" class="relative p-5 rounded-3xl cursor-pointer transition-all duration-200 flex flex-col justify-between min-h-[140px] group ${isSelected ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20 scale-[0.98]' : 'bg-zinc-900 hover:bg-zinc-800 text-zinc-100'}">
+                  
                   <div class="flex items-start justify-between gap-3 mb-4">
-                    <div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${isSelected ? 'bg-white text-indigo-600' : 'bg-zinc-800 text-transparent'}">
-                      <i data-lucide="check" class="w-3.5 h-3.5" stroke-width="4"></i>
+                    <div class="flex items-center gap-3">
+                        <div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${isSelected ? 'bg-white text-indigo-600' : 'bg-zinc-800 text-transparent'}">
+                          <i data-lucide="check" class="w-3.5 h-3.5" stroke-width="4"></i>
+                        </div>
+                        <div class="w-10 h-10 rounded-xl bg-zinc-950 flex-shrink-0 flex items-center justify-center overflow-hidden border ${isSelected ? 'border-indigo-500/50' : 'border-zinc-800'}">
+                            ${logoHtml}
+                        </div>
                     </div>
-                    <button onclick="openEdit(event, '${channel.id}')" class="p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all ${isSelected ? 'hover:bg-indigo-500 text-indigo-200 hover:text-white' : 'hover:bg-zinc-700 text-zinc-500 hover:text-white'}">
-                      <i data-lucide="edit-2" class="w-4 h-4"></i>
-                    </button>
+                    
+                    <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onclick="openEdit(event, '${channel.id}')" class="p-2 rounded-full transition-all ${isSelected ? 'hover:bg-indigo-500 text-indigo-200 hover:text-white' : 'hover:bg-zinc-700 text-zinc-500 hover:text-white'}" title="Edit Stream">
+                          <i data-lucide="edit-2" class="w-4 h-4"></i>
+                        </button>
+                        <button onclick="deleteChannel(event, '${channel.id}')" class="p-2 rounded-full transition-all hover:bg-red-500/20 text-zinc-500 hover:text-red-400" title="Delete Stream">
+                          <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
                   </div>
+
                   <div>
                     <h3 class="font-bold text-base leading-tight mb-2 line-clamp-2 pr-2" title="${escapedName}">${channel.name}</h3>
-                    <span class="${isSelected ? 'bg-indigo-500/50 text-indigo-50' : 'bg-zinc-950 text-zinc-400'} inline-block px-3 py-1 rounded-full text-xs font-bold tracking-wide truncate max-w-full">
-                      ${channel.group}
-                    </span>
+                    <div class="flex items-center gap-2 overflow-hidden mt-1">
+                        <span class="${isSelected ? 'bg-indigo-500/50 text-indigo-50' : 'bg-zinc-950 text-zinc-400'} inline-block px-3 py-1 rounded-full text-xs font-bold tracking-wide truncate max-w-full flex-shrink-0">
+                          ${channel.group}
+                        </span>
+                        ${channel.tvgId ? `<span class="text-[10px] font-mono text-zinc-500 truncate border border-zinc-800 rounded px-1.5 py-0.5" title="EPG ID">${channel.tvgId}</span>` : ''}
+                    </div>
                   </div>
+
                 </div>
             `;
         });
@@ -372,7 +422,7 @@
         }
     }
 
-    // UI Interactions
+    // --- UI Interactions ---
     function handleSearch(e) {
         state.search = e.target.value;
         renderGrid();
@@ -402,14 +452,28 @@
     }
 
     function deleteSelected() {
-        if (!confirm(`Delete ${state.selectedChannels.size} channels forever?`)) return;
+        if (!confirm(`Delete ${state.selectedChannels.size} selected channels forever?`)) return;
         state.channels = state.channels.filter(c => !state.selectedChannels.has(c.id));
         state.selectedChannels.clear();
         updateGroups();
         renderGrid();
+        document.getElementById('btn-sync').disabled = false;
+        showToast('Channels deleted.');
     }
 
-    // Modals & States
+    function deleteChannel(e, id) {
+        e.stopPropagation();
+        if(confirm('Delete this specific stream forever?')) {
+            state.channels = state.channels.filter(c => c.id !== id);
+            state.selectedChannels.delete(id);
+            updateGroups();
+            renderGrid();
+            document.getElementById('btn-sync').disabled = false;
+            showToast('Stream deleted.');
+        }
+    }
+
+    // --- Modals & States ---
     function showLoading(isLoading) {
         const empty = document.getElementById('empty-state');
         const loading = document.getElementById('loading-state');
@@ -453,13 +517,31 @@
         showToast('Credentials saved locally.');
     }
 
+    function openAdd() {
+        state.editingChannelId = 'new';
+        document.getElementById('edit-modal-title').innerText = 'Add New Stream';
+        document.getElementById('edit-name').value = '';
+        document.getElementById('edit-url').value = '';
+        document.getElementById('edit-group').value = state.selectedGroup !== 'All' ? state.selectedGroup : '';
+        document.getElementById('edit-logo').value = '';
+        document.getElementById('edit-tvgid').value = '';
+        document.getElementById('edit-tvgname').value = '';
+        document.getElementById('edit-modal').classList.remove('hidden');
+    }
+
     function openEdit(e, id) {
-        e.stopPropagation();
+        e.stopPropagation(); // prevent card selection
         const channel = state.channels.find(c => c.id === id);
         if (!channel) return;
+        
         state.editingChannelId = id;
-        document.getElementById('edit-name').value = channel.name;
-        document.getElementById('edit-group').value = channel.group;
+        document.getElementById('edit-modal-title').innerText = 'Edit Stream';
+        document.getElementById('edit-name').value = channel.name || '';
+        document.getElementById('edit-url').value = channel.url || '';
+        document.getElementById('edit-group').value = channel.group || '';
+        document.getElementById('edit-logo').value = channel.logo || '';
+        document.getElementById('edit-tvgid').value = channel.tvgId || '';
+        document.getElementById('edit-tvgname').value = channel.tvgName || '';
         document.getElementById('edit-modal').classList.remove('hidden');
     }
 
@@ -469,14 +551,37 @@
     }
 
     function saveEdit() {
-        const channel = state.channels.find(c => c.id === state.editingChannelId);
-        if (channel) {
-            channel.name = document.getElementById('edit-name').value;
-            channel.group = document.getElementById('edit-group').value;
-            updateGroups();
-            renderGrid();
+        const name = document.getElementById('edit-name').value.trim();
+        const url = document.getElementById('edit-url').value.trim();
+        
+        if (!name || !url) {
+            return showToast('Stream Name and URL are required.', true);
         }
+
+        const chData = {
+            name: name,
+            url: url,
+            group: document.getElementById('edit-group').value.trim() || 'Uncategorized',
+            logo: document.getElementById('edit-logo').value.trim(),
+            tvgId: document.getElementById('edit-tvgid').value.trim(),
+            tvgName: document.getElementById('edit-tvgname').value.trim()
+        };
+
+        if (state.editingChannelId === 'new') {
+            chData.id = crypto.randomUUID();
+            state.channels.unshift(chData);
+            showToast('Stream added successfully.');
+        } else {
+            const idx = state.channels.findIndex(c => c.id === state.editingChannelId);
+            if (idx > -1) {
+                state.channels[idx] = { ...state.channels[idx], ...chData };
+            }
+        }
+        
+        updateGroups();
+        renderGrid();
         closeEdit();
+        document.getElementById('btn-sync').disabled = false; // Enable sync button
     }
   </script>
 </body>
