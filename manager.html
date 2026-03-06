@@ -19,92 +19,97 @@
 </head>
 <body class="bg-zinc-950 text-zinc-100 font-sans antialiased selection:bg-indigo-500/30 flex flex-col min-h-screen">
 
-  <!-- Header -->
-  <header class="px-4 sm:px-6 py-4 sm:py-5 flex justify-between items-center z-10 sticky top-0 bg-zinc-950/90 backdrop-blur-2xl border-b border-zinc-900">
-    <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-xl sm:rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-600/20">
-        <i data-lucide="tv" class="w-5 h-5"></i>
-      </div>
-      <h1 class="text-xl sm:text-2xl font-black tracking-tight text-white hidden sm:block">IPTV Manager</h1>
-    </div>
-    
-    <div class="flex items-center gap-2 sm:gap-3">
-      <button onclick="openEpg()" class="w-10 h-10 sm:w-auto sm:px-5 sm:py-2.5 flex items-center justify-center gap-2 bg-zinc-900 hover:bg-zinc-800 rounded-full text-sm font-semibold transition-all active:scale-95 text-zinc-300 hover:text-white" title="EPG Sources">
-        <i data-lucide="calendar-clock" class="w-5 h-5 sm:w-4 sm:h-4"></i> <span class="hidden lg:inline">EPG</span>
-      </button>
-      <button onclick="openSettings()" class="w-10 h-10 flex items-center justify-center rounded-full bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white transition-all active:scale-95" title="Settings">
-        <i data-lucide="settings" class="w-5 h-5"></i>
-      </button>
-      <div class="w-px h-6 bg-zinc-800 mx-0.5 sm:mx-1 hidden sm:block"></div>
-      <button onclick="openAdd()" class="w-10 h-10 sm:w-auto sm:px-5 sm:py-2.5 flex items-center justify-center gap-2 bg-indigo-600/20 hover:bg-indigo-600 text-indigo-400 hover:text-white rounded-full text-sm font-bold transition-all active:scale-95" title="Add Stream">
-        <i data-lucide="plus" class="w-5 h-5 sm:w-4 sm:h-4"></i> <span class="hidden md:inline">Add</span>
-      </button>
-      <button onclick="loadPlaylist()" id="btn-fetch" class="w-10 h-10 sm:w-auto sm:px-5 sm:py-2.5 flex items-center justify-center gap-2 bg-zinc-900 hover:bg-zinc-800 rounded-full text-sm font-semibold transition-all active:scale-95 disabled:opacity-50" title="Fetch from Cloud">
-        <i data-lucide="download" class="w-5 h-5 sm:w-4 sm:h-4"></i> <span class="hidden sm:inline">Fetch</span>
-      </button>
-      <button onclick="savePlaylist()" id="btn-sync" class="w-10 h-10 sm:w-auto sm:px-5 sm:py-2.5 flex items-center justify-center gap-2 bg-white text-black hover:bg-zinc-200 rounded-full text-sm font-bold transition-all active:scale-95 disabled:opacity-50 shadow-xl shadow-white/5" disabled title="Sync to Cloud">
-        <i data-lucide="upload" class="w-5 h-5 sm:w-4 sm:h-4"></i> <span class="hidden sm:inline">Sync</span>
-      </button>
-    </div>
-  </header>
+  <!-- Unified Sticky Header & Toolbar -->
+  <div class="sticky top-0 z-40 bg-zinc-950/90 backdrop-blur-2xl border-b border-zinc-900 shadow-xl shadow-zinc-950/50">
+    <div class="max-w-[1600px] mx-auto w-full flex flex-col">
+      
+      <!-- Header -->
+      <header class="px-4 sm:px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl sm:rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-600/20">
+            <i data-lucide="tv" class="w-5 h-5"></i>
+          </div>
+          <h1 class="text-xl sm:text-2xl font-black tracking-tight text-white hidden sm:block">IPTV Manager</h1>
+        </div>
+        
+        <div class="flex items-center gap-2 sm:gap-3">
+          <button onclick="openEpg()" class="w-10 h-10 sm:w-auto sm:px-5 sm:py-2.5 flex items-center justify-center gap-2 bg-zinc-900 hover:bg-zinc-800 rounded-full text-sm font-semibold transition-all active:scale-95 text-zinc-300 hover:text-white" title="EPG Sources">
+            <i data-lucide="calendar-clock" class="w-5 h-5 sm:w-4 sm:h-4"></i> <span class="hidden lg:inline">EPG</span>
+          </button>
+          <button onclick="openSettings()" class="w-10 h-10 flex items-center justify-center rounded-full bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white transition-all active:scale-95" title="Settings">
+            <i data-lucide="settings" class="w-5 h-5"></i>
+          </button>
+          <div class="w-px h-6 bg-zinc-800 mx-0.5 sm:mx-1 hidden sm:block"></div>
+          <button onclick="openAdd()" class="w-10 h-10 sm:w-auto sm:px-5 sm:py-2.5 flex items-center justify-center gap-2 bg-indigo-600/20 hover:bg-indigo-600 text-indigo-400 hover:text-white rounded-full text-sm font-bold transition-all active:scale-95" title="Add Stream">
+            <i data-lucide="plus" class="w-5 h-5 sm:w-4 sm:h-4"></i> <span class="hidden md:inline">Add</span>
+          </button>
+          <button onclick="loadPlaylist()" id="btn-fetch" class="w-10 h-10 sm:w-auto sm:px-5 sm:py-2.5 flex items-center justify-center gap-2 bg-zinc-900 hover:bg-zinc-800 rounded-full text-sm font-semibold transition-all active:scale-95 disabled:opacity-50" title="Fetch from Cloud">
+            <i data-lucide="download" class="w-5 h-5 sm:w-4 sm:h-4"></i> <span class="hidden sm:inline">Fetch</span>
+          </button>
+          <button onclick="savePlaylist()" id="btn-sync" class="w-10 h-10 sm:w-auto sm:px-5 sm:py-2.5 flex items-center justify-center gap-2 bg-white text-black hover:bg-zinc-200 rounded-full text-sm font-bold transition-all active:scale-95 disabled:opacity-50 shadow-xl shadow-white/5" disabled title="Sync to Cloud">
+            <i data-lucide="upload" class="w-5 h-5 sm:w-4 sm:h-4"></i> <span class="hidden sm:inline">Sync</span>
+          </button>
+        </div>
+      </header>
 
-  <!-- Toast Notification -->
-  <div id="toast" class="fixed top-20 sm:top-24 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-4 w-[90%] sm:w-auto flex justify-center">
+      <!-- Toolbar (Now Sticky) -->
+      <div class="px-4 sm:px-6 pb-4 flex flex-col md:flex-row gap-3 sm:gap-4 items-stretch md:items-center">
+        <div class="relative w-full md:flex-1 group">
+          <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 w-5 h-5 group-focus-within:text-indigo-400 transition-colors"></i>
+          <input type="text" id="search-input" placeholder="Search streams..." class="w-full bg-zinc-900 border-2 border-transparent focus:border-indigo-500/50 rounded-2xl pl-12 pr-6 py-3.5 text-base font-medium placeholder:text-zinc-600 focus:outline-none transition-all" oninput="handleSearch(event)">
+        </div>
+        <div class="relative w-full md:w-auto flex-shrink-0">
+          <i data-lucide="list-filter" class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 w-4 h-4 pointer-events-none"></i>
+          <select id="group-select" class="w-full md:w-auto bg-zinc-900 border-none rounded-2xl pl-12 pr-12 py-3.5 text-base font-medium appearance-none focus:ring-2 focus:ring-indigo-500 focus:outline-none cursor-pointer hover:bg-zinc-800 transition-colors" onchange="handleGroupChange(event)">
+            <option value="All">All Categories</option>
+          </select>
+        </div>
+        <div id="selection-actions" class="w-full md:flex-1 flex justify-end items-center gap-4 hidden">
+          <div class="flex items-center justify-between md:justify-end gap-2 sm:gap-3 w-full md:w-auto bg-zinc-900 md:bg-transparent p-2 md:p-0 rounded-2xl">
+            <span id="selected-count" class="text-sm font-bold text-zinc-400 pl-3 md:pl-0">0 Selected</span>
+            <button onclick="openBulkMove()" class="flex items-center gap-2 bg-indigo-500/10 hover:bg-indigo-500 text-indigo-400 hover:text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl text-sm font-bold transition-all active:scale-95">
+              <i data-lucide="folder-input" class="w-4 h-4"></i> <span class="hidden sm:inline">Move</span>
+            </button>
+            <button onclick="deleteSelected()" class="flex items-center gap-2 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl text-sm font-bold transition-all active:scale-95">
+              <i data-lucide="trash-2" class="w-4 h-4"></i> <span class="hidden sm:inline">Delete</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification (Moved to bottom so it doesn't overlap sticky header) -->
+  <div id="toast" class="fixed bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 opacity-0 pointer-events-none transform translate-y-6 w-[90%] sm:w-auto flex justify-center">
     <div id="toast-content" class="px-5 sm:px-6 py-3 rounded-full text-sm font-bold shadow-2xl backdrop-blur-xl border flex items-center justify-center gap-2 w-full sm:w-auto text-center">
     </div>
   </div>
 
   <!-- Main Workspace -->
-  <main class="flex-1 flex flex-col max-w-[1600px] w-full mx-auto px-4 sm:px-6 pb-6 overflow-hidden mt-4 sm:mt-2">
-    
-    <!-- Toolbar -->
-    <div class="flex flex-col md:flex-row gap-3 sm:gap-4 items-stretch md:items-center mb-6 sm:mb-8">
-      <div class="relative w-full md:flex-1 group">
-        <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 w-5 h-5 group-focus-within:text-indigo-400 transition-colors"></i>
-        <input type="text" id="search-input" placeholder="Search streams..." class="w-full bg-zinc-900 border-2 border-transparent focus:border-indigo-500/50 rounded-2xl pl-12 pr-6 py-3.5 text-base font-medium placeholder:text-zinc-600 focus:outline-none transition-all" oninput="handleSearch(event)">
-      </div>
-      <div class="relative w-full md:w-auto flex-shrink-0">
-        <i data-lucide="list-filter" class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 w-4 h-4 pointer-events-none"></i>
-        <select id="group-select" class="w-full md:w-auto bg-zinc-900 border-none rounded-2xl pl-12 pr-12 py-3.5 text-base font-medium appearance-none focus:ring-2 focus:ring-indigo-500 focus:outline-none cursor-pointer hover:bg-zinc-800 transition-colors" onchange="handleGroupChange(event)">
-          <option value="All">All Categories</option>
-        </select>
-      </div>
-      <div id="selection-actions" class="w-full md:flex-1 flex justify-end items-center gap-4 hidden">
-        <div class="flex items-center justify-between md:justify-end gap-3 w-full md:w-auto bg-zinc-900 md:bg-transparent p-2 md:p-0 rounded-2xl">
-          <span id="selected-count" class="text-sm font-bold text-zinc-400 pl-3 md:pl-0">0 Selected</span>
-          <button onclick="deleteSelected()" class="flex items-center gap-2 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl text-sm font-bold transition-all active:scale-95">
-            <i data-lucide="trash-2" class="w-4 h-4"></i> <span>Delete</span>
-          </button>
+  <main class="flex-1 flex flex-col max-w-[1600px] w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
+      
+      <!-- Empty State -->
+      <div id="empty-state" class="h-full flex flex-col items-center justify-center text-center max-w-sm mx-auto px-4 py-12">
+        <div class="w-20 h-20 sm:w-24 sm:h-24 bg-zinc-900 rounded-full flex items-center justify-center mb-6">
+          <i data-lucide="tv" class="w-8 h-8 sm:w-10 sm:h-10 text-zinc-700"></i>
         </div>
+        <h2 class="text-xl sm:text-2xl font-bold mb-2">No Streams Found</h2>
+        <p class="text-sm sm:text-base text-zinc-500 mb-8 leading-relaxed">Connect your Dropbox and load your M3U playlist to start organizing your IPTV network.</p>
+        <button onclick="openSettings()" class="bg-white text-black px-6 py-3.5 rounded-full font-bold active:scale-95 transition-all text-sm sm:text-base w-full sm:w-auto">
+          Configure Connection
+        </button>
       </div>
-    </div>
+      
+      <!-- Loading State -->
+      <div id="loading-state" class="hidden h-full flex flex-col items-center justify-center text-zinc-500 gap-4 py-12">
+        <div class="w-8 h-8 sm:w-10 sm:h-10 border-4 border-zinc-800 border-t-indigo-600 rounded-full animate-spin"></div>
+        <p class="font-medium tracking-wide text-sm sm:text-base">Syncing with Dropbox...</p>
+      </div>
 
-    <!-- Content Area -->
-    <div id="grid-container" class="flex-1 overflow-y-auto pb-24 custom-scrollbar">
-        
-        <!-- Empty State -->
-        <div id="empty-state" class="h-full flex flex-col items-center justify-center text-center max-w-sm mx-auto px-4">
-          <div class="w-20 h-20 sm:w-24 sm:h-24 bg-zinc-900 rounded-full flex items-center justify-center mb-6">
-            <i data-lucide="tv" class="w-8 h-8 sm:w-10 sm:h-10 text-zinc-700"></i>
-          </div>
-          <h2 class="text-xl sm:text-2xl font-bold mb-2">No Streams Found</h2>
-          <p class="text-sm sm:text-base text-zinc-500 mb-8 leading-relaxed">Connect your Dropbox and load your M3U playlist to start organizing your IPTV network.</p>
-          <button onclick="openSettings()" class="bg-white text-black px-6 py-3.5 rounded-full font-bold active:scale-95 transition-all text-sm sm:text-base w-full sm:w-auto">
-            Configure Connection
-          </button>
-        </div>
-        
-        <!-- Loading State -->
-        <div id="loading-state" class="hidden h-full flex flex-col items-center justify-center text-zinc-500 gap-4">
-          <div class="w-8 h-8 sm:w-10 sm:h-10 border-4 border-zinc-800 border-t-indigo-600 rounded-full animate-spin"></div>
-          <p class="font-medium tracking-wide text-sm sm:text-base">Syncing with Dropbox...</p>
-        </div>
-
-        <!-- Channels Grid -->
-        <div id="channels-grid" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 sm:gap-4">
-           <!-- Dynamically populated by JavaScript -->
-        </div>
-    </div>
+      <!-- Channels Grid -->
+      <div id="channels-grid" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 sm:gap-4 pb-12">
+         <!-- Dynamically populated by JavaScript -->
+      </div>
   </main>
 
   <!-- Settings Modal -->
@@ -208,6 +213,22 @@
       <div class="flex flex-col-reverse sm:flex-row gap-2 sm:gap-3 mt-6 sm:mt-8">
         <button onclick="closeEdit()" class="w-full sm:flex-1 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl text-sm font-bold text-zinc-300 bg-zinc-800 hover:bg-zinc-700 transition-colors">Cancel</button>
         <button onclick="saveEdit()" class="w-full sm:flex-[2] py-3.5 sm:py-4 rounded-xl sm:rounded-2xl text-sm font-bold bg-indigo-600 hover:bg-indigo-500 text-white transition-colors mb-2 sm:mb-0">Save Stream</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Move Modal -->
+  <div id="move-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-md hidden">
+    <div class="bg-zinc-900 w-full max-w-sm rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 shadow-2xl relative modal-enter">
+      <h3 class="text-lg sm:text-xl font-black mb-5 sm:mb-6">Move Streams</h3>
+      <div>
+        <label class="block text-xs sm:text-sm font-bold mb-1.5 sm:mb-2 text-zinc-300 pl-1">New or Existing Category</label>
+        <input type="text" id="bulk-move-input" list="existing-groups-list" class="w-full bg-zinc-950 border-none rounded-xl sm:rounded-2xl p-3.5 sm:p-4 text-sm sm:text-base focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all" placeholder="e.g. Favorite Movies">
+        <datalist id="existing-groups-list"></datalist>
+      </div>
+      <div class="flex flex-col-reverse sm:flex-row gap-2 sm:gap-3 mt-6 sm:mt-8">
+        <button onclick="closeBulkMove()" class="w-full sm:flex-1 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl text-sm font-bold text-zinc-300 bg-zinc-800 hover:bg-zinc-700 transition-colors">Cancel</button>
+        <button onclick="saveBulkMove()" class="w-full sm:flex-[2] py-3.5 sm:py-4 rounded-xl sm:rounded-2xl text-sm font-bold bg-indigo-600 hover:bg-indigo-500 text-white transition-colors mb-2 sm:mb-0">Move Streams</button>
       </div>
     </div>
   </div>
@@ -497,6 +518,43 @@
         showToast('Channels deleted.');
     }
 
+    // --- Bulk Move Logic ---
+    function openBulkMove() {
+        const input = document.getElementById('bulk-move-input');
+        input.value = '';
+        
+        const datalist = document.getElementById('existing-groups-list');
+        const groups = new Set(state.channels.map(c => c.group));
+        datalist.innerHTML = Array.from(groups).sort().map(g => `<option value="${g}">`).join('');
+        
+        document.getElementById('move-modal').classList.remove('hidden');
+    }
+
+    function closeBulkMove() {
+        document.getElementById('move-modal').classList.add('hidden');
+    }
+
+    function saveBulkMove() {
+        const newGroup = document.getElementById('bulk-move-input').value.trim();
+        if (!newGroup) return showToast('Please enter a category name.', true);
+
+        state.channels.forEach(ch => {
+            if (state.selectedChannels.has(ch.id)) {
+                ch.group = newGroup;
+            }
+        });
+
+        const count = state.selectedChannels.size;
+        state.selectedChannels.clear();
+        state.selectedGroup = newGroup; // Automatically jump to the new category
+        
+        updateGroups();
+        renderGrid();
+        closeBulkMove();
+        document.getElementById('btn-sync').disabled = false;
+        showToast(`Moved ${count} streams to "${newGroup}".`);
+    }
+
     function deleteChannel(e, id) {
         e.stopPropagation();
         if(confirm('Delete this specific stream forever?')) {
@@ -533,11 +591,11 @@
         content.className = `px-5 sm:px-6 py-3 rounded-full text-sm font-bold shadow-2xl backdrop-blur-xl border flex items-center justify-center gap-2 w-full sm:w-auto text-center ${isError ? 'bg-red-500/10 border-red-500/20 text-red-400' : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'}`;
         content.innerHTML = `<i data-lucide="${isError ? 'alert-circle' : 'check'}" class="w-4 h-4 shrink-0"></i> <span>${msg}</span>`;
         
-        toast.classList.remove('opacity-0', '-translate-y-4', 'pointer-events-none');
+        toast.classList.remove('opacity-0', 'translate-y-6', 'pointer-events-none');
         lucide.createIcons();
         
         setTimeout(() => {
-            toast.classList.add('opacity-0', '-translate-y-4', 'pointer-events-none');
+            toast.classList.add('opacity-0', 'translate-y-6', 'pointer-events-none');
         }, 3000);
     }
 
