@@ -25,20 +25,24 @@
       <div class="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-600/20">
         <i data-lucide="tv" class="w-5 h-5"></i>
       </div>
-      <h1 class="text-2xl font-black tracking-tight text-white">IPTV Manager</h1>
+      <h1 class="text-2xl font-black tracking-tight text-white hidden sm:block">IPTV Manager</h1>
     </div>
     <div class="flex items-center gap-3">
+      <button onclick="openEpg()" class="flex items-center gap-2 bg-zinc-900 hover:bg-zinc-800 px-4 sm:px-5 py-2.5 rounded-full text-sm font-semibold transition-all active:scale-95 text-zinc-300 hover:text-white">
+        <i data-lucide="calendar-clock" class="w-4 h-4"></i> <span class="hidden md:inline">EPG Sources</span>
+      </button>
       <button onclick="openSettings()" class="w-10 h-10 flex items-center justify-center rounded-full bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white transition-all active:scale-95" title="Settings">
         <i data-lucide="settings" class="w-5 h-5"></i>
       </button>
-      <button onclick="openAdd()" class="flex items-center gap-2 bg-indigo-600/20 hover:bg-indigo-600 text-indigo-400 hover:text-white px-5 py-2.5 rounded-full text-sm font-bold transition-all active:scale-95">
-        <i data-lucide="plus" class="w-4 h-4"></i> <span class="hidden sm:inline">Add Stream</span>
+      <div class="w-px h-6 bg-zinc-800 mx-1"></div>
+      <button onclick="openAdd()" class="flex items-center gap-2 bg-indigo-600/20 hover:bg-indigo-600 text-indigo-400 hover:text-white px-4 sm:px-5 py-2.5 rounded-full text-sm font-bold transition-all active:scale-95">
+        <i data-lucide="plus" class="w-4 h-4"></i> <span class="hidden lg:inline">Add Stream</span>
       </button>
-      <button onclick="loadPlaylist()" id="btn-fetch" class="flex items-center gap-2 bg-zinc-900 hover:bg-zinc-800 px-5 py-2.5 rounded-full text-sm font-semibold transition-all active:scale-95 disabled:opacity-50">
-        <i data-lucide="download" class="w-4 h-4"></i> <span>Fetch</span>
+      <button onclick="loadPlaylist()" id="btn-fetch" class="flex items-center gap-2 bg-zinc-900 hover:bg-zinc-800 px-4 sm:px-5 py-2.5 rounded-full text-sm font-semibold transition-all active:scale-95 disabled:opacity-50">
+        <i data-lucide="download" class="w-4 h-4"></i> <span class="hidden sm:inline">Fetch</span>
       </button>
-      <button onclick="savePlaylist()" id="btn-sync" class="flex items-center gap-2 bg-white text-black hover:bg-zinc-200 px-5 py-2.5 rounded-full text-sm font-bold transition-all active:scale-95 disabled:opacity-50 shadow-xl shadow-white/5" disabled>
-        <i data-lucide="upload" class="w-4 h-4"></i> <span>Sync</span>
+      <button onclick="savePlaylist()" id="btn-sync" class="flex items-center gap-2 bg-white text-black hover:bg-zinc-200 px-4 sm:px-5 py-2.5 rounded-full text-sm font-bold transition-all active:scale-95 disabled:opacity-50 shadow-xl shadow-white/5" disabled>
+        <i data-lucide="upload" class="w-4 h-4"></i> <span class="hidden sm:inline">Sync</span>
       </button>
     </div>
   </header>
@@ -130,12 +134,43 @@
         </div>
         <div>
           <label class="block text-sm font-bold mb-2 text-zinc-300 pl-1">File Path in Dropbox</label>
-          <input type="text" id="input-path" class="w-full bg-zinc-950 border-none rounded-2xl p-4 text-base focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all placeholder:text-zinc-700" placeholder="/playlist.m3u">
+          <input type="text" id="input-path" class="w-full bg-zinc-950 border-none rounded-2xl p-4 text-base focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all placeholder:text-zinc-700" placeholder="/14m3ueditor/playlist.m3u">
         </div>
         <button onclick="saveSettings()" class="w-full bg-white hover:bg-zinc-200 text-black py-4 rounded-2xl text-base font-bold transition-all active:scale-[0.98] mt-4">
           Save & Continue
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- EPG Links Modal -->
+  <div id="epg-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md hidden">
+    <div class="bg-zinc-900 w-full max-w-lg rounded-[2rem] p-8 shadow-2xl relative modal-enter">
+      <button onclick="closeEpg()" class="absolute top-6 right-6 p-2 bg-zinc-800 hover:bg-zinc-700 rounded-full text-zinc-400 hover:text-white transition-colors">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      <div class="flex items-center gap-4 mb-8">
+        <div class="w-12 h-12 bg-purple-500/10 text-purple-500 rounded-2xl flex items-center justify-center">
+          <i data-lucide="calendar-clock" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h2 class="text-xl font-black">EPG Sources</h2>
+          <p class="text-sm text-zinc-400 font-medium">Manage global TV guide links</p>
+        </div>
+      </div>
+
+      <div class="space-y-3 mb-6 max-h-[40vh] overflow-y-auto custom-scrollbar pr-2" id="epg-list">
+        <!-- EPG items injected dynamically -->
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-3 mb-2 mt-6">
+        <input type="text" id="new-epg-url" class="flex-1 bg-zinc-950 border-none rounded-2xl p-4 text-sm focus:ring-2 focus:ring-purple-500 focus:outline-none transition-all placeholder:text-zinc-700" placeholder="https://epgshare01.online/epg.xml.gz">
+        <button onclick="addEpg()" class="bg-purple-600 hover:bg-purple-500 text-white px-6 py-4 sm:py-0 rounded-2xl font-bold transition-all">Add Link</button>
+      </div>
+      
+      <button onclick="saveEpgUrls()" class="w-full bg-white hover:bg-zinc-200 text-black py-4 rounded-2xl text-base font-bold transition-all active:scale-[0.98] mt-6">
+        Confirm & Save EPGs
+      </button>
     </div>
   </div>
 
@@ -182,12 +217,15 @@
     let state = {
         token: localStorage.getItem('dropbox_token') || '',
         filePath: localStorage.getItem('dropbox_filepath') || '/14m3ueditor/playlist.m3u',
+        epgUrls: [], // Stores global EPG URLs
         channels: [],
         search: '',
         selectedGroup: 'All',
         selectedChannels: new Set(),
         editingChannelId: null
     };
+
+    let tempEpgUrls = []; // For editing state in modal
 
     // Initialize UI Icons
     lucide.createIcons();
@@ -211,6 +249,15 @@
 
       if (!lines[0].startsWith('#EXTM3U')) throw new Error("Invalid M3U file: Missing #EXTM3U header");
 
+      // Extract Global EPG from the EXTM3U header
+      const headerLine = lines[0];
+      const tvgUrlMatch = headerLine.match(/(?:url-tvg|x-tvg-url)="([^"]+)"/i);
+      if (tvgUrlMatch) {
+          state.epgUrls = tvgUrlMatch[1].split(',').map(url => url.trim()).filter(url => url);
+      } else {
+          state.epgUrls = [];
+      }
+
       for (let i = 1; i < lines.length; i++) {
         const line = lines[i].trim();
         if (!line) continue;
@@ -218,11 +265,9 @@
         if (line.startsWith('#EXTINF:')) {
           currentChannel = { id: crypto.randomUUID() };
           
-          // Name extraction (everything after the last comma)
           const commaIndex = line.lastIndexOf(',');
           currentChannel.name = commaIndex !== -1 ? line.substring(commaIndex + 1).trim() : 'Unknown';
           
-          // Tag extractions
           currentChannel.group = extractAttr(line, 'group-title') || 'Uncategorized';
           currentChannel.logo = extractAttr(line, 'tvg-logo');
           currentChannel.tvgId = extractAttr(line, 'tvg-id');
@@ -242,7 +287,14 @@
     }
 
     function generateM3U(channels) {
-      let text = '#EXTM3U\n';
+      let text = '#EXTM3U';
+      
+      // Inject Global EPG Sources back into the header
+      if (state.epgUrls.length > 0) {
+          text += ` url-tvg="${state.epgUrls.join(',')}"`;
+      }
+      text += '\n';
+
       channels.forEach(ch => {
         let extinf = '#EXTINF:-1';
         if (ch.tvgId) extinf += ` tvg-id="${ch.tvgId}"`;
@@ -357,7 +409,6 @@
             const isSelected = state.selectedChannels.has(channel.id);
             const escapedName = channel.name.replace(/"/g, '&quot;');
             
-            // Render actual TV Logo if it exists
             const logoHtml = channel.logo 
                 ? `<img src="${channel.logo}" class="w-full h-full object-contain p-1" onerror="this.outerHTML='<i data-lucide=\\'tv\\' class=\\'text-zinc-700 w-6 h-6\\'></i>'"/>`
                 : `<i data-lucide="tv" class="text-zinc-700 w-6 h-6"></i>`;
@@ -505,6 +556,7 @@
         }, 3000);
     }
 
+    // Settings
     function openSettings() { document.getElementById('settings-modal').classList.remove('hidden'); }
     function closeSettings() { document.getElementById('settings-modal').classList.add('hidden'); }
     
@@ -517,6 +569,57 @@
         showToast('Credentials saved locally.');
     }
 
+    // EPG Manager
+    function openEpg() {
+        tempEpgUrls = [...state.epgUrls];
+        renderEpgList();
+        document.getElementById('epg-modal').classList.remove('hidden');
+    }
+
+    function closeEpg() {
+        document.getElementById('epg-modal').classList.add('hidden');
+    }
+
+    function renderEpgList() {
+        const list = document.getElementById('epg-list');
+        if (tempEpgUrls.length === 0) {
+            list.innerHTML = `<div class="text-center text-zinc-500 py-6 text-sm font-medium border-2 border-dashed border-zinc-800 rounded-2xl">No EPG links configured yet.</div>`;
+        } else {
+            list.innerHTML = tempEpgUrls.map((url, i) => `
+                <div class="flex items-center justify-between bg-zinc-950 border border-zinc-800 p-3 rounded-2xl gap-3">
+                    <div class="flex-1 min-w-0 font-mono text-xs text-zinc-300 truncate" title="${url}">${url}</div>
+                    <button onclick="removeEpg(${i})" class="text-zinc-500 hover:text-red-400 p-2 rounded-full hover:bg-red-500/10 transition-colors shrink-0">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+    }
+
+    function addEpg() {
+        const input = document.getElementById('new-epg-url');
+        const val = input.value.trim();
+        if (val) {
+            tempEpgUrls.push(val);
+            input.value = '';
+            renderEpgList();
+        }
+    }
+
+    function removeEpg(index) {
+        tempEpgUrls.splice(index, 1);
+        renderEpgList();
+    }
+
+    function saveEpgUrls() {
+        state.epgUrls = [...tempEpgUrls];
+        closeEpg();
+        document.getElementById('btn-sync').disabled = false; // Enable sync button because header changed
+        showToast('EPG links updated. Remember to sync!');
+    }
+
+    // Stream Editing
     function openAdd() {
         state.editingChannelId = 'new';
         document.getElementById('edit-modal-title').innerText = 'Add New Stream';
